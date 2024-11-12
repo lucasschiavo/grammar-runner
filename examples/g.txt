@@ -1,0 +1,6 @@
+MinhaG = ({A,B,C}, {a, b, c}, P, A)
+P = {
+A -> aA | aB
+B -> C
+C ->
+}
