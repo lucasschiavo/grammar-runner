@@ -71,12 +71,14 @@ public class State
   public string Name;
   public bool IsFinal;
   public Dictionary<char, List<State>> Transitions { get; }
+  public List<State> EmptyTransitions { get; }
 
   public State(string name, bool isFinal)
   {
     Name = name;
     IsFinal = isFinal;
     Transitions = [];
+    EmptyTransitions = [];
   }
 
   public void AddTransition(char symbol, State state)
@@ -88,5 +90,15 @@ public class State
     }
 
     Transitions[symbol].Add(state);
+  }
+
+  public void AddEmptyTransition(State state)
+  {
+    if (EmptyTransitions.Contains(state))
+    {
+      return;
+    }
+
+    EmptyTransitions.Add(state);
   }
 }
