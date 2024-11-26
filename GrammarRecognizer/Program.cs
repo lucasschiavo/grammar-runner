@@ -17,6 +17,8 @@ internal class Program
 
     Grammar grammar = grammarReader.Read();
 
+    Automaton automaton = grammar.ToAutomaton();
+
     /* DETERMINISTIC AUTOMATON
     var q0 = new State("q0", false);
     var q1 = new State("q1", true);

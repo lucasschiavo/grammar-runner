@@ -25,6 +25,46 @@ public class Grammar
       .ToDictionary(group => group.Key, group => group.Select(kv => kv.Production).ToList());
     InitialVariable = initialVariable;
   }
+
+  public Automaton ToAutomaton()
+  {
+    Dictionary<char, State> stateDict = [];
+    State finalState = new("qf", true);
+
+    // initialize all the automaton states
+    foreach (char var in Productions.Keys)
+    {
+      stateDict.Add(var, new State($"q{var}", false));
+    }
+
+    foreach ((char var, List<Production> productions) in Productions)
+    {
+      // maps each production to a possibly empty transition
+      foreach (Production production in productions)
+      {
+        if (production.Symbol == null && production.Variable == null)
+        {
+          stateDict[var].AddEmptyTransition(finalState);
+        }
+        else if (production.Variable != null && production.Symbol != null)
+        {
+          stateDict[var].AddTransition(production.Symbol.Value, stateDict[production.Variable.Value]);
+        }
+        else if (production.Symbol != null) // only has a terminal
+        {
+          stateDict[var].AddTransition(production.Symbol.Value, finalState);
+        }
+        else if (production.Variable != null) // only has a variable
+        {
+          stateDict[var].AddEmptyTransition(stateDict[production.Variable.Value]);
+        }
+      }
+    }
+
+    State initialState = stateDict[InitialVariable];
+
+    return new Automaton(initialState);
+  }
 }
 
 public record Rule(char Variable, Production Production);
