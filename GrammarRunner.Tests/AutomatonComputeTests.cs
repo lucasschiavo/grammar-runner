@@ -106,4 +106,33 @@ public class AutomatonComputeTests
     Assert.False(automaton.Compute("acacacb"));
     Assert.False(automaton.Compute(""));
   }
+
+  [Fact]
+  public void EmptyMovementAutomaton_ManyEmptyTransitions()
+  {
+    // this automaton recognized words of the language a*b*a*
+    State q0 = new("q0", false);
+    State q1 = new("q1", false);
+    State q2 = new("q2", true);
+
+    q0.AddEmptyTransition(q1);
+    q0.AddTransition('a', q0);
+
+    q1.AddEmptyTransition(q2);
+    q1.AddTransition('b', q1);
+
+    q2.AddTransition('a', q2);
+
+    Automaton automaton = new(q0, [q0, q1, q2]);
+
+    Assert.True(automaton.Compute("aaaaabbbbbaaaaa"));
+    Assert.True(automaton.Compute("bbbbbaaaaa"));
+    Assert.True(automaton.Compute("aaaaabbbbb"));
+    Assert.True(automaton.Compute("aaaaa"));
+    Assert.True(automaton.Compute("bbbbb"));
+    Assert.True(automaton.Compute(""));
+
+    Assert.False(automaton.Compute("aabbbaaaabb"));
+    Assert.False(automaton.Compute("bbbaaaabbaa"));
+  }
 }

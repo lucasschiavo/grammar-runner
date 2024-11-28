@@ -1,7 +1,6 @@
 namespace GrammarRecognizer.Models;
 
 using GrammarRecognizer.Helpers;
-using System.Runtime.Serialization;
 
 public class Automaton
 {
@@ -135,6 +134,11 @@ public class State
   public void RemoveEmptyTransitions()
   {
     List<State> reacheable = GetAllEmptyTransitions();
+
+    if (reacheable.Any(s => s.IsFinal))
+    {
+      IsFinal = true;
+    }
 
     foreach (var state in reacheable)
     {
