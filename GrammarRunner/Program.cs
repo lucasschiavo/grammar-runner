@@ -18,8 +18,6 @@ internal class Program
     Grammar grammar = grammarReader.Read();
 
     Automaton automaton = grammar.ToAutomaton();
-
-
   }
 }
 
