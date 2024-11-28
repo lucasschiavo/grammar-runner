@@ -1,14 +1,23 @@
 namespace GrammarRecognizer.Models;
 
 using GrammarRecognizer.Helpers;
+using System.Runtime.Serialization;
 
 public class Automaton
 {
   public State InitialState;
+  public List<State> States;
 
-  public Automaton(State initialState)
+  public Automaton(State initialState, List<State> states)
   {
     InitialState = initialState;
+    States = states;
+
+    // empty movement automaton to non deterministic
+    foreach (var state in States)
+    {
+      state.RemoveEmptyTransitions();
+    }
   }
 
   public bool Compute(string word)
@@ -89,7 +98,28 @@ public class State
       return;
     }
 
-    Transitions[symbol].Add(state);
+    if (!Transitions[symbol].Contains(state))
+    {
+      Transitions[symbol].Add(state);
+    }
+  }
+
+  public void AddTransition(char symbol, List<State> states)
+  {
+    if (!Transitions.ContainsKey(symbol))
+    {
+      Transitions[symbol] = states;
+      return;
+    }
+
+    foreach (State state in states)
+    {
+      if (!Transitions[symbol].Contains(state))
+      {
+        Transitions[symbol].Add(state);
+      }
+    }
+
   }
 
   public void AddEmptyTransition(State state)
@@ -100,5 +130,40 @@ public class State
     }
 
     EmptyTransitions.Add(state);
+  }
+
+  public void RemoveEmptyTransitions()
+  {
+    List<State> reacheable = GetAllEmptyTransitions();
+
+    foreach (var state in reacheable)
+    {
+      foreach ((char symbol, List<State> states) in state.Transitions)
+      {
+        AddTransition(symbol, states);
+      }
+    }
+  }
+
+  private List<State> GetAllEmptyTransitions()
+  {
+    Queue<State> queue = new(EmptyTransitions);
+    List<State> visited = [.. EmptyTransitions];
+
+    while (queue.Count != 0)
+    {
+      State current = queue.Dequeue();
+
+      foreach (var state in current.EmptyTransitions)
+      {
+        if (!visited.Contains(state))
+        {
+          queue.Enqueue(state);
+          visited.Add(state);
+        }
+      }
+    }
+
+    return visited;
   }
 }

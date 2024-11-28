@@ -63,7 +63,7 @@ public class Grammar
 
     State initialState = stateDict[InitialVariable];
 
-    return new Automaton(initialState);
+    return new Automaton(initialState, [.. stateDict.Values]);
   }
 }
 
