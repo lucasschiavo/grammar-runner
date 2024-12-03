@@ -157,4 +157,23 @@ public class AutomatonComputeTests
     Assert.DoesNotContain(dq0, set1);
   }
 
+  [Fact]
+  public void NDAutomaton_ToDeterministic()
+  {
+    // this automaton accepts words that have "aaa" as sufix
+    State q0 = new("q0", false);
+    State q1 = new("q1", false);
+    State q2 = new("q2", false);
+    State qf = new("qf", true);
+
+    q0.AddTransition('a', [q0, q1]);
+    q0.AddTransition('b', q0);
+
+    q1.AddTransition('a', q2);
+    q2.AddTransition('a', qf);
+
+    var automaton = new Automaton(q0, [q0, q1, q2, qf]).ToDeterministic();
+
+    Assert.True(automaton.States.Count >= 4);
+  }
 }

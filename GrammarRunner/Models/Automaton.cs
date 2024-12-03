@@ -73,6 +73,73 @@ public class Automaton
     return false;
   }
 
+  public DFAutomaton ToDeterministic()
+  {
+    var unprocessedDStates = new Queue<List<State>>();
+    var processedDStates = new HashSet<DState>();
+
+    unprocessedDStates.Enqueue([InitialState]);
+
+    while (unprocessedDStates.Count > 0)
+    {
+      var currentNDStates = unprocessedDStates.Dequeue();
+
+      DState dState = processedDStates
+        .Where(ds => ds.NDStates.SetEquals(currentNDStates))
+        .FirstOrDefault() ?? new(currentNDStates);
+
+      processedDStates.Add(dState); // redundante em alguns casos, melhorar logica
+
+      foreach (var symbol in Alphabet())
+      {
+        var nextNDStates = new List<State>();
+
+        foreach (var state in currentNDStates)
+        {
+          if (state.Transitions.ContainsKey(symbol))
+          {
+            nextNDStates.AddRange(state.Transitions[symbol]);
+          }
+        }
+
+        if (nextNDStates.Count > 0)
+        {
+          var nextDState = processedDStates
+            .Where(ds => ds.NDStates.SetEquals(nextNDStates))
+            .FirstOrDefault() ?? new DState(nextNDStates);
+          dState.AddTransition(symbol, nextDState);
+
+          if (processedDStates.Add(nextDState))
+          {
+            unprocessedDStates.Enqueue(nextNDStates);
+          }
+        }
+      }
+    }
+    var initialDState = processedDStates
+      .Where(ds => ds.NDStates.SetEquals([InitialState]))
+      .First();
+
+    return new DFAutomaton(initialDState, processedDStates);
+  }
+
+  private HashSet<char> Alphabet()
+  {
+    var alphabet = new HashSet<char>();
+
+    foreach (var state in States)
+    {
+      foreach (var transition in state.Transitions)
+      {
+        alphabet.Add(transition.Key);
+      }
+    }
+
+    return alphabet;
+  }
+}
+
+
 public class DState
 {
   public string Name;
@@ -116,9 +183,9 @@ public class DState
 public class DFAutomaton
 {
   public DState InitialState;
-  public List<DState> States;
+  public HashSet<DState> States;
 
-  public DFAutomaton(DState initialState, List<DState> states)
+  public DFAutomaton(DState initialState, HashSet<DState> states)
   {
     InitialState = initialState;
     States = states;
