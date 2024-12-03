@@ -135,4 +135,26 @@ public class AutomatonComputeTests
     Assert.False(automaton.Compute("aabbbaaaabb"));
     Assert.False(automaton.Compute("bbbaaaabbaa"));
   }
+
+  [Fact]
+  public void DState_Equality()
+  {
+    // this automaton accepts words that have either "aa" or "bb" as substring
+    State q0 = new("q0", false);
+    State q1 = new("q1", false);
+    State q2 = new("q2", false);
+    State qf = new("qf", true);
+
+    DState dq0 = new([q0, q1]);
+    DState dq1 = new([q1, q0]);
+    DState dq2 = new([q1, q2]);
+
+    Assert.True(dq0.Equals(dq1));
+
+    HashSet<DState> set1 = [dq1];
+
+    Assert.Contains(dq1, set1);
+    Assert.DoesNotContain(dq0, set1);
+  }
+
 }
