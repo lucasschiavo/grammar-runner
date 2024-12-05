@@ -1,5 +1,6 @@
 ﻿using GrammarRecognizer.Models;
 using GrammarRecognizer.Parsing;
+using System.Text;
 
 namespace GrammarRecognizer;
 
@@ -17,7 +18,10 @@ internal class Program
 
     Grammar grammar = grammarReader.Read();
 
-    Automaton automaton = grammar.ToAutomaton();
+    DFAutomaton automaton = grammar
+      .ToAutomaton()
+      .ToDeterministic();
+
+    Console.WriteLine(automaton.ToDot());
   }
 }
-
