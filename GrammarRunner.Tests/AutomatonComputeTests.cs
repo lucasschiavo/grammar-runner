@@ -8,15 +8,15 @@ public class AutomatonComputeTests
   public void DeterministicAutomaton()
   {
     // This automaton accepts words with an odd number of a's
-    State q0 = new("q0", false);
-    State q1 = new("q1", true);
+    NDState q0 = new("q0", false);
+    NDState q1 = new("q1", true);
 
     q0.AddTransition('a', q1);
     q0.AddTransition('b', q0);
     q1.AddTransition('a', q0);
     q1.AddTransition('b', q1);
 
-    Automaton automaton = new(q0, [q0, q1]);
+    NDAutomaton automaton = new(q0, [q0, q1]);
 
     // words with odd number of a's return true
     Assert.True(automaton.Compute("bab"));
@@ -32,10 +32,10 @@ public class AutomatonComputeTests
   public void NonDeterministicAutomaton()
   {
     // this automaton accepts words that have either "aa" or "bb" as substring
-    State q0 = new("q0", false);
-    State q1 = new("q1", false);
-    State q2 = new("q2", false);
-    State qf = new("qf", true);
+    NDState q0 = new("q0", false);
+    NDState q1 = new("q1", false);
+    NDState q2 = new("q2", false);
+    NDState qf = new("qf", true);
 
     q0.AddTransition('a', q0);
     q0.AddTransition('b', q0);
@@ -49,7 +49,7 @@ public class AutomatonComputeTests
     qf.AddTransition('a', qf);
     qf.AddTransition('b', qf);
 
-    Automaton automaton = new(q0, [q0, q1, q2, qf]);
+    NDAutomaton automaton = new(q0, [q0, q1, q2, qf]);
 
     Assert.True(automaton.Compute("babbab"));
     Assert.True(automaton.Compute("babaab"));
@@ -66,14 +66,14 @@ public class AutomatonComputeTests
   public void EmptyMovementAutomaton_Sufix()
   {
     // this automaton accepts word that have either "a" or "bb" or "ccc" as sufix
-    State q0 = new("q0", false);
-    State q1 = new("q1", false);
-    State q2 = new("q2", false);
-    State q3 = new("q3", false);
-    State q4 = new("q4", false);
-    State q5 = new("q5", false);
-    State q6 = new("q6", false);
-    State qf = new("qf", true);
+    NDState q0 = new("q0", false);
+    NDState q1 = new("q1", false);
+    NDState q2 = new("q2", false);
+    NDState q3 = new("q3", false);
+    NDState q4 = new("q4", false);
+    NDState q5 = new("q5", false);
+    NDState q6 = new("q6", false);
+    NDState qf = new("qf", true);
 
     q0.AddEmptyTransition(q1);
     q0.AddEmptyTransition(q2);
@@ -91,7 +91,7 @@ public class AutomatonComputeTests
     q5.AddTransition('c', q6);
     q6.AddTransition('c', qf);
 
-    var automaton = new Automaton(q0, [q0, q1, q2, q3, q4, q5, q6, qf]);
+    var automaton = new NDAutomaton(q0, [q0, q1, q2, q3, q4, q5, q6, qf]);
 
     Assert.True(automaton.Compute("a"));
     Assert.True(automaton.Compute("abcabcabca"));
@@ -111,9 +111,9 @@ public class AutomatonComputeTests
   public void EmptyMovementAutomaton_ManyEmptyTransitions()
   {
     // this automaton recognized words of the language a*b*a*
-    State q0 = new("q0", false);
-    State q1 = new("q1", false);
-    State q2 = new("q2", true);
+    NDState q0 = new("q0", false);
+    NDState q1 = new("q1", false);
+    NDState q2 = new("q2", true);
 
     q0.AddEmptyTransition(q1);
     q0.AddTransition('a', q0);
@@ -123,7 +123,7 @@ public class AutomatonComputeTests
 
     q2.AddTransition('a', q2);
 
-    Automaton automaton = new(q0, [q0, q1, q2]);
+    NDAutomaton automaton = new(q0, [q0, q1, q2]);
 
     Assert.True(automaton.Compute("aaaaabbbbbaaaaa"));
     Assert.True(automaton.Compute("bbbbbaaaaa"));
@@ -140,10 +140,10 @@ public class AutomatonComputeTests
   public void DState_Equality()
   {
     // this automaton accepts words that have either "aa" or "bb" as substring
-    State q0 = new("q0", false);
-    State q1 = new("q1", false);
-    State q2 = new("q2", false);
-    State qf = new("qf", true);
+    NDState q0 = new("q0", false);
+    NDState q1 = new("q1", false);
+    NDState q2 = new("q2", false);
+    NDState qf = new("qf", true);
 
     DState dq0 = new([q0, q1]);
     DState dq1 = new([q1, q0]);
@@ -161,10 +161,10 @@ public class AutomatonComputeTests
   public void NDAutomaton_ToDeterministic()
   {
     // this automaton accepts words that have "aaa" as sufix
-    State q0 = new("q0", false);
-    State q1 = new("q1", false);
-    State q2 = new("q2", false);
-    State qf = new("qf", true);
+    NDState q0 = new("q0", false);
+    NDState q1 = new("q1", false);
+    NDState q2 = new("q2", false);
+    NDState qf = new("qf", true);
 
     q0.AddTransition('a', [q0, q1]);
     q0.AddTransition('b', q0);
@@ -172,7 +172,7 @@ public class AutomatonComputeTests
     q1.AddTransition('a', q2);
     q2.AddTransition('a', qf);
 
-    var automaton = new Automaton(q0, [q0, q1, q2, qf]).ToDeterministic();
+    var automaton = new NDAutomaton(q0, [q0, q1, q2, qf]).ToDeterministic();
 
     Assert.True(automaton.States.Count >= 4);
   }

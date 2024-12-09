@@ -26,15 +26,15 @@ public class Grammar
     InitialVariable = initialVariable;
   }
 
-  public Automaton ToAutomaton()
+  public NDAutomaton ToAutomaton()
   {
-    Dictionary<char, State> stateDict = [];
-    State finalState = new("qf", true);
+    Dictionary<char, NDState> stateDict = [];
+    NDState finalState = new("qf", true);
 
     // initialize all the automaton states
     foreach (char var in Productions.Keys)
     {
-      stateDict.Add(var, new State($"q{var}", false));
+      stateDict.Add(var, new NDState($"q{var}", false));
     }
 
     foreach ((char var, List<Production> productions) in Productions)
@@ -61,9 +61,9 @@ public class Grammar
       }
     }
 
-    State initialState = stateDict[InitialVariable];
+    NDState initialState = stateDict[InitialVariable];
 
-    return new Automaton(initialState, [.. stateDict.Values]);
+    return new NDAutomaton(initialState, [.. stateDict.Values]);
   }
 }
 

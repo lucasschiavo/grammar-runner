@@ -1,13 +1,13 @@
 namespace GrammarRecognizer.Models;
 
-public class State
+public class NDState
 {
   public string Name;
   public bool IsFinal;
-  public Dictionary<char, List<State>> Transitions { get; }
-  public List<State> EmptyTransitions { get; }
+  public Dictionary<char, List<NDState>> Transitions { get; }
+  public List<NDState> EmptyTransitions { get; }
 
-  public State(string name, bool isFinal)
+  public NDState(string name, bool isFinal)
   {
     Name = name;
     IsFinal = isFinal;
@@ -15,7 +15,7 @@ public class State
     EmptyTransitions = [];
   }
 
-  public void AddTransition(char symbol, State state)
+  public void AddTransition(char symbol, NDState state)
   {
     if (!Transitions.ContainsKey(symbol))
     {
@@ -29,7 +29,7 @@ public class State
     }
   }
 
-  public void AddTransition(char symbol, List<State> states)
+  public void AddTransition(char symbol, List<NDState> states)
   {
     if (!Transitions.ContainsKey(symbol))
     {
@@ -37,7 +37,7 @@ public class State
       return;
     }
 
-    foreach (State state in states)
+    foreach (NDState state in states)
     {
       if (!Transitions[symbol].Contains(state))
       {
@@ -47,7 +47,7 @@ public class State
 
   }
 
-  public void AddEmptyTransition(State state)
+  public void AddEmptyTransition(NDState state)
   {
     if (EmptyTransitions.Contains(state))
     {
@@ -59,7 +59,7 @@ public class State
 
   public void RemoveEmptyTransitions()
   {
-    List<State> reacheable = GetAllEmptyTransitions();
+    List<NDState> reacheable = GetAllEmptyTransitions();
 
     if (reacheable.Any(s => s.IsFinal))
     {
@@ -68,21 +68,21 @@ public class State
 
     foreach (var state in reacheable)
     {
-      foreach ((char symbol, List<State> states) in state.Transitions)
+      foreach ((char symbol, List<NDState> states) in state.Transitions)
       {
         AddTransition(symbol, states);
       }
     }
   }
 
-  private List<State> GetAllEmptyTransitions()
+  private List<NDState> GetAllEmptyTransitions()
   {
-    Queue<State> queue = new(EmptyTransitions);
-    List<State> visited = [.. EmptyTransitions];
+    Queue<NDState> queue = new(EmptyTransitions);
+    List<NDState> visited = [.. EmptyTransitions];
 
     while (queue.Count != 0)
     {
-      State current = queue.Dequeue();
+      NDState current = queue.Dequeue();
 
       foreach (var state in current.EmptyTransitions)
       {

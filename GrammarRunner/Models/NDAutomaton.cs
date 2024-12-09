@@ -1,15 +1,14 @@
 namespace GrammarRecognizer.Models;
 
 using GrammarRecognizer.Helpers;
-using Microsoft.Win32.SafeHandles;
 using System.Text;
 
-public class Automaton
+public class NDAutomaton
 {
-  public State InitialState;
-  public List<State> States;
+  public NDState InitialState;
+  public List<NDState> States;
 
-  public Automaton(State initialState, List<State> states)
+  public NDAutomaton(NDState initialState, List<NDState> states)
   {
     InitialState = initialState;
     States = states;
@@ -23,7 +22,7 @@ public class Automaton
 
   public bool Compute(string word)
   {
-    List<State> currentStates = [InitialState];
+    List<NDState> currentStates = [InitialState];
     Stack<char> symbols = new(word.Reverse());
 
     while (symbols.Count != 0 && currentStates.Count != 0)
@@ -40,7 +39,7 @@ public class Automaton
 
   public bool PrettyCompute(string word)
   {
-    List<State> currentStates = [InitialState];
+    List<NDState> currentStates = [InitialState];
     Stack<char> symbols = new(word.Reverse());
 
     Console.WriteLine($"Word: {word}");
@@ -77,7 +76,7 @@ public class Automaton
 
   public DFAutomaton ToDeterministic()
   {
-    var unprocessedDStates = new Queue<List<State>>();
+    var unprocessedDStates = new Queue<List<NDState>>();
     var processedDStates = new HashSet<DState>();
 
     unprocessedDStates.Enqueue([InitialState]);
@@ -94,7 +93,7 @@ public class Automaton
 
       foreach (var symbol in Alphabet())
       {
-        var nextNDStates = new List<State>();
+        var nextNDStates = new List<NDState>();
 
         foreach (var state in currentNDStates)
         {
@@ -147,9 +146,9 @@ public class DState
   public string Name;
   public bool IsFinal;
   public Dictionary<char, DState> Transitions { get; }
-  public HashSet<State> NDStates;
+  public HashSet<NDState> NDStates;
 
-  public DState(List<State> states)
+  public DState(List<NDState> states)
   {
     Name = states.Select(s => s.Name).StringJoin(",");
     IsFinal = states.Any(s => s.IsFinal);
