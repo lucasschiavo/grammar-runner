@@ -1,7 +1,6 @@
 namespace GrammarRecognizer.Models;
 
 using GrammarRecognizer.Helpers;
-using System.Text;
 
 public class NDAutomaton
 {
@@ -137,93 +136,5 @@ public class NDAutomaton
     }
 
     return alphabet;
-  }
-}
-
-
-public class DState
-{
-  public string Name;
-  public bool IsFinal;
-  public Dictionary<char, DState> Transitions { get; }
-  public HashSet<NDState> NDStates;
-
-  public DState(List<NDState> states)
-  {
-    Name = states.Select(s => s.Name).StringJoin(",");
-    IsFinal = states.Any(s => s.IsFinal);
-    Transitions = [];
-    NDStates = states.ToHashSet();
-  }
-
-  public void AddTransition(char symbol, DState state) => Transitions.Add(symbol, state);
-
-  // DStates are compared by their ND States
-  public override bool Equals(object? obj)
-  {
-    if (obj is DState other)
-    {
-      return NDStates.SetEquals(other.NDStates);
-    }
-
-    return false;
-  }
-
-  // https://stackoverflow.com/questions/371328/why-is-it-important-to-override-gethashcode-when-equals-method-is-overridden
-  public override int GetHashCode()
-  {
-    int hash = 17;
-    foreach (var state in NDStates)
-    {
-      hash = hash * 23 + state.Name.GetHashCode();
-    }
-    return hash;
-  }
-}
-
-public class DFAutomaton
-{
-  public DState InitialState;
-  public HashSet<DState> States;
-
-  public DFAutomaton(DState initialState, HashSet<DState> states)
-  {
-    InitialState = initialState;
-    States = states;
-  }
-
-  public string ToDot()
-  {
-    var builder = new StringBuilder()
-      .AppendLine("digraph G {")
-      .AppendLine(@"invis[style=""invis""]")        // 
-      .AppendLine($"invis -> {InitialState.Name}"); // invisible node that points to the initial state
-
-    foreach (var fromState in States)
-    {
-      Dictionary<DState, List<char>> groupedTransitions = fromState.Transitions
-        .GroupBy(s => s.Value)
-        .ToDictionary(
-          group => group.Key,
-          group => group.Select(kv => kv.Key).ToList()
-        );
-
-      if (fromState.IsFinal)
-      {
-        builder = builder.AppendLine(@$"{fromState.Name}[shape=""doublecircle""]");
-      }
-
-      foreach ((DState toState, List<char> symbols) in groupedTransitions)
-      {
-        builder = builder.Append($"{fromState.Name} -> {toState.Name}")
-          .Append(@"[label="" ")
-          .AppendJoin(", ", symbols)
-          .AppendLine(@"""]");
-      }
-    }
-
-    builder = builder.AppendLine("}");
-
-    return builder.ToString();
   }
 }
