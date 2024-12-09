@@ -13,6 +13,20 @@ public class DFAutomaton
     States = states;
   }
 
+  public bool Compute(string word)
+  {
+    Stack<char> symbols = new(word.Reverse());
+    DState? currentState = InitialState;
+
+    while (symbols.Count > 0)
+    {
+      var symbol = symbols.Pop();
+      currentState = currentState?.Transitions.GetValueOrDefault(symbol);
+    }
+
+    return currentState?.IsFinal ?? false;
+  }
+
   public string ToDot()
   {
     var builder = new StringBuilder()

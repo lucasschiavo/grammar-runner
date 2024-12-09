@@ -1,6 +1,5 @@
 ﻿using GrammarRecognizer.Models;
 using GrammarRecognizer.Parsing;
-using System.Text;
 
 namespace GrammarRecognizer;
 
@@ -22,6 +21,6 @@ internal class Program
       .ToAutomaton()
       .ToDeterministic();
 
-    Console.WriteLine(automaton.ToDot());
+    Console.WriteLine(automaton.Compute("lucas@ufrgs.com.br"));
   }
 }

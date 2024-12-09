@@ -175,5 +175,15 @@ public class AutomatonComputeTests
     var automaton = new NDAutomaton(q0, [q0, q1, q2, qf]).ToDeterministic();
 
     Assert.True(automaton.States.Count >= 4);
+
+    Assert.True(automaton.Compute("babaaa"));
+    Assert.True(automaton.Compute("aaa"));
+    Assert.True(automaton.Compute("aaaa"));
+
+    Assert.False(automaton.Compute("babaaab"));
+    Assert.False(automaton.Compute("babaaabb"));
+    Assert.False(automaton.Compute("aa"));
+    Assert.False(automaton.Compute("a"));
+    Assert.False(automaton.Compute(""));
   }
 }
