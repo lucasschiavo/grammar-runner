@@ -1,6 +1,6 @@
-namespace GrammarRecognizer.Models;
+namespace GrammarRunner.Models;
 
-using GrammarRecognizer.Helpers;
+using GrammarRunner.Utils;
 
 public class DState
 {

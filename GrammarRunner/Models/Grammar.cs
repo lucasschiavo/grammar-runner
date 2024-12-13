@@ -1,4 +1,4 @@
-namespace GrammarRecognizer.Models;
+namespace GrammarRunner.Models;
 
 public class Grammar
 {

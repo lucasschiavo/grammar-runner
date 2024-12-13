@@ -1,7 +1,7 @@
-﻿using GrammarRecognizer.Models;
-using GrammarRecognizer.Parsing;
+﻿using GrammarRunner.Models;
+using GrammarRunner.Parsing;
 
-namespace GrammarRecognizer;
+namespace GrammarRunner;
 
 internal class Program
 {

@@ -1,6 +1,6 @@
-namespace GrammarRecognizer.Models;
+using GrammarRunner.Utils;
 
-using GrammarRecognizer.Helpers;
+namespace GrammarRunner.Models;
 
 public class NDAutomaton
 {

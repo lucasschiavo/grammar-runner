@@ -1,4 +1,4 @@
-namespace GrammarRecognizer.Helpers;
+namespace GrammarRunner.Utils;
 
 internal static class IEnumerableExtensions
 {

@@ -1,6 +1,6 @@
-namespace GrammarRecognizer.Models;
-
 using System.Text;
+
+namespace GrammarRunner.Models;
 
 public class DFAutomaton
 {

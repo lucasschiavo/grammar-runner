@@ -1,7 +1,7 @@
-using GrammarRecognizer.Models;
+using GrammarRunner.Models;
 using System.Text.RegularExpressions;
 
-namespace GrammarRecognizer.Parsing;
+namespace GrammarRunner.Parsing;
 
 public partial class GrammarReader
 {

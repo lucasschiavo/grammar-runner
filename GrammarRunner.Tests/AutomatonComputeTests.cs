@@ -1,4 +1,4 @@
-using GrammarRecognizer.Models;
+using GrammarRunner.Models;
 
 namespace GrammarRunner.Tests;
 
