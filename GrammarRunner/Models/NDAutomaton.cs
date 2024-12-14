@@ -88,12 +88,13 @@ public class NDAutomaton
         .Where(ds => ds.NDStates.SetEquals(currentNDStates))
         .FirstOrDefault() ?? new(currentNDStates);
 
-      processedDStates.Add(dState); // redundante em alguns casos, melhorar logica
+      processedDStates.Add(dState);
 
       foreach (var symbol in Alphabet())
       {
         var nextNDStates = new List<NDState>();
 
+        // get all transitions that contains symbol
         foreach (var state in currentNDStates)
         {
           if (state.Transitions.ContainsKey(symbol))

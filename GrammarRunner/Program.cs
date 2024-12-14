@@ -25,14 +25,24 @@ internal class Program
     var grammarFile = grammarArg[3..];
     var wordsFile = wordsArg[3..];
 
-    var grammarReader = new GrammarReader(grammarFile);
-
-    Grammar grammar = grammarReader.Read();
+    Grammar grammar = new GrammarReader(grammarFile).Read();
 
     DFAutomaton automaton = grammar
       .ToAutomaton()
       .ToDeterministic();
 
-    Console.WriteLine(automaton.Compute("lucas@ufrgs.com.br"));
+    string[] words = File.ReadAllLines(wordsFile);
+
+    foreach (string word in words)
+    {
+      if (automaton.Compute(word))
+      {
+        Console.WriteLine($"✔️  {word} é aceito pela gramática.");
+      }
+      else
+      {
+        Console.WriteLine($"❌ {word} não é aceito pela gramática.");
+      }
+    }
   }
 }
