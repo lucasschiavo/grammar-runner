@@ -1,4 +1,4 @@
-email_validator = ({S, N, D, C, E, F, G, H, I}, {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., -, _, @}, P, S)
+email_validator = ({S, N, D, E, F, G, H, I, J, K}, {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., -, _, @}, P, S)
 
 P = {
   S -> aN,
@@ -69,39 +69,13 @@ P = {
   N -> -N,
   N -> @D,
 
-  D -> aD,
-  D -> bD,
-  D -> cD,
-  D -> dD,
-  D -> eD,
-  D -> fD,
-  D -> gD,
-  D -> hD,
-  D -> iD,
-  D -> jD,
-  D -> kD,
-  D -> lD,
-  D -> mD,
-  D -> nD,
-  D -> oD,
-  D -> pD,
-  D -> qD,
-  D -> rD,
-  D -> sD,
-  D -> tD,
-  D -> uD,
-  D -> vD,
-  D -> wD,
-  D -> xD,
-  D -> yD,
-  D -> zD,
-  D -> .C,
-
-  C -> cE,
-  E -> oF,
-  F -> mG,
-  G -> .H,
-  G -> ,
-  H -> bI,
-  I -> r
+  D -> uE,
+  E -> fF,
+  F -> rG,
+  G -> gH,
+  H -> sI,
+  I -> .J,
+  
+  J -> bK,
+  K -> r
 }
