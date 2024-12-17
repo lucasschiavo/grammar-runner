@@ -1,4 +1,4 @@
-using GrammarRunner.Models;
+﻿using GrammarRunner.Models;
 using GrammarRunner.Parsing;
 
 namespace GrammarRunner;
@@ -15,6 +15,7 @@ internal class Program
 
     var grammarArg = args.Where(s => s.StartsWith("-G=")).FirstOrDefault();
     var wordsArg = args.Where(s => s.StartsWith("-W=")).FirstOrDefault();
+    bool printDot = args.Where(s => s == "-D").Any();
 
     if (grammarArg == null || wordsArg == null)
     {
@@ -30,6 +31,12 @@ internal class Program
     DFAutomaton automaton = grammar
       .ToAutomaton()
       .ToDeterministic();
+
+    if (printDot)
+    {
+      Console.WriteLine(automaton.ToDot());
+      return;
+    }
 
     string[] words = File.ReadAllLines(wordsFile);
 
